@@ -22,9 +22,9 @@ async def bot_start(message: types.Message):
 
         # About message to ADMIN
         msg = f"{user_mention} [<code>{user_id}</code>] bazaga qo'shildi."
-        await bot.send_message(chat_id=ADMINS, text=msg)
+        await bot.send_message(chat_id=ADMINS[0], text=msg)
 
     except:
-        await bot.send_message(chat_id=ADMINS, text=f"{user_mention} [<code>{user_id}</code>] bazaga oldin qo'shilgan")
+        await bot.send_message(chat_id=ADMINS[0], text=f"{user_mention} [<code>{user_id}</code>] bazaga oldin qo'shilgan")
 
     await message.answer(f"Xush kelibsiz! {full_name}")
