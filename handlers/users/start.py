@@ -5,7 +5,8 @@ from datetime import datetime
 from data.config import ADMINS
 from handlers.detector import detect_is_admin
 from loader import dp, db, bot
-from utils.misc.subs import check_is_subs
+from utils.misc.checking import check_is_subs
+from keyboards.inline.check import check
 
 
 @dp.message_handler(CommandStart(), state='*')
@@ -44,12 +45,18 @@ async def bot_start(message: types.Message):
     else:
         sub_status = False
         for item in all_sponsors:
-            check_user = await check_is_subs(user_id=user_id, chat_id=item)
+            check_user = await check_is_subs(user_id=user_id, chat_id=item[1])
             if check_user:
                 sub_status = True
             else:
                 pass
+
         if not sub_status:
             text = "You have to subscribe to the channels and groups"
+            await message.answer(text=text, reply_markup=check(sponsors=all_sponsors, status=sub_status))
+
         else:
-            text = "You subscribe to all sponsor"
+            text = "<b>✋ Assalomu alaykum, ProBuzz-ga xush kelibsiz!" \
+                   "\n🚀 Biz sizga Telegram, Instagram,  YouTube, TikTok larning barcha xizmatlarini taklif etamiz !" \
+                   "\n\n🔽 Davom etish uchun quyidagi tugmalardan birini tanlang :</b>"
+            await message.answer(text=text, reply_markup=await detect_is_admin(user_id=user_id))

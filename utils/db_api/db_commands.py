@@ -57,9 +57,10 @@ class Database:
         sql = """
         CREATE TABLE IF NOT EXISTS Sponsor (
         id SERIAL PRIMARY KEY,
-        chat_id BigInt NOT NULL,
+        chat_id BigInt NOT NULL UNIQUE,
         chat_title TEXT,
         chat_type VARCHAR(10),
+        chat_link TEXT,
         date_joined DATE
         );
         """
@@ -76,6 +77,10 @@ class Database:
         sql = "INSERT INTO users (full_name, username, user_id, date_joined) VALUES($1, $2, $3, $4) returning *"
         return await self.execute(sql, full_name, username, user_id, date_joined, fetchrow=True)
 
+    async def add_sponsor(self, chat_id: str, chat_title: str, chat_type: int, chat_link: str, date_joined):
+        sql = "INSERT INTO Sponsor (chat_id, chat_title, chat_type, chat_link, date_joined) VALUES($1, $2, $3, $4, $5) returning *"
+        return await self.execute(sql, chat_id, chat_title, chat_type, chat_link, date_joined, fetchrow=True)
+
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
         return await self.execute(sql, fetch=True)
@@ -87,7 +92,6 @@ class Database:
     async def select_one_users(self, user_id):
         sql = "SELECT * FROM Users WHERE user_id=$1"
         return await self.execute(sql, user_id, fetch=True)
-
 
     async def select_user(self, **kwargs):
         sql = "SELECT * FROM Users WHERE "
@@ -105,7 +109,6 @@ class Database:
     async def delete_user(self, user_id):
         sql = "DELETE FROM Users WHERE user_id=$1"
         await self.execute(sql, user_id, execute=True)
-
 
     async def drop_courses(self):
         await self.execute("DROP TABLE Courses", execute=True)
