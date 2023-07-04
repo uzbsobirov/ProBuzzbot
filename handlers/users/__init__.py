@@ -1,3 +1,3 @@
 from . import (
-    help, start, panel, back
+    help, start, panel, back, orders
 )

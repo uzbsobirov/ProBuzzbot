@@ -17,6 +17,25 @@ needed = ReplyKeyboardMarkup(
 )
 
 
+have_needed = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(
+                text="➕ Qo'shish"
+            ),
+            KeyboardButton(
+                text="🗑 Kanalni o'chirish"
+            )
+        ],
+        [
+            KeyboardButton(
+                text="◀️ Orqaga"
+            )
+        ]
+    ], resize_keyboard=True, one_time_keyboard=True
+)
+
+
 back = ReplyKeyboardMarkup(
     keyboard=[
         [

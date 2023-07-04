@@ -106,9 +106,9 @@ class Database:
         sql = "UPDATE Users SET issubs=$1 WHERE user_id=$2"
         return await self.execute(sql, issubs, user_id, execute=True)
 
-    async def delete_user(self, user_id):
-        sql = "DELETE FROM Users WHERE user_id=$1"
-        await self.execute(sql, user_id, execute=True)
+    async def delete_sponsor(self, chat_id):
+        sql = "DELETE FROM Sponsor WHERE chat_id=$1"
+        await self.execute(sql, chat_id, execute=True)
 
     async def drop_courses(self):
         await self.execute("DROP TABLE Courses", execute=True)

@@ -1,3 +1,3 @@
 from . import (
-    check, manager
+    check, manager, orders
 )

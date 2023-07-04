@@ -8,5 +8,5 @@ back = ReplyKeyboardMarkup(
                 text="◀️ Orqaga"
             )
         ]
-    ]
+    ], resize_keyboard=True
 )
