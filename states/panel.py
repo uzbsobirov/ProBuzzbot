@@ -7,3 +7,4 @@ class Panel(StatesGroup):
     # sponsor
     sponsor = State()
     get_data = State()
+    delete = State()
