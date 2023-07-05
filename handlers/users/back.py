@@ -1,7 +1,10 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+from keyboards.inline.orders import orders, telegram_orders
 from states.panel import Panel
+from states.orders import Order
+
 from loader import dp
 from handlers.detector import detect_is_admin
 from keyboards.default.manager.menu import menu
@@ -31,3 +34,37 @@ async def back_to_main(message: types.Message, state: FSMContext):
     await message.answer(text=text, reply_markup=menu)
 
     await Panel.menu.set()
+
+
+@dp.callback_query_handler(text='back', state=Order.orders)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+
+    await call.message.delete()
+
+    await call.message.answer(text="🖥 Asosiy menu", reply_markup=await detect_is_admin(user_id))
+    await state.finish()
+
+
+@dp.callback_query_handler(text='back', state=Order.all_orders)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    text = "<b>📱 Ijtimoiy tarmoqni tanlang:</b>"
+
+    await call.message.edit_text(text=text, reply_markup=orders)
+    await Order.orders.set()
+
+
+@dp.callback_query_handler(text='back', state=Order.services)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    await call.message.edit_text(text="<b>Quyidagi ichki bo'limlardan birini tanlang:</b>",
+                                 reply_markup=telegram_orders)
+
+    await Order.all_orders.set()
+
+
+@dp.callback_query_handler(text='back', state=Order.inner_service)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    await call.message.edit_text(text="<b>Quyidagi ichki bo'limlardan birini tanlang:</b>",
+                                 reply_markup=telegram_orders)
+
+    await Order.all_orders.set()
