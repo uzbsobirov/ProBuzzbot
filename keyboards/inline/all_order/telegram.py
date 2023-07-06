@@ -139,3 +139,79 @@ def tg_future_setting_views(service):
     )
 
     return markup
+
+
+def tg_comment_vote(service):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in service:
+        if item['category'] == 'Telegram Comments💬 & Vote 🗳':
+            markup.insert(
+                InlineKeyboardButton(
+                    text=item['name'], callback_data=f"{item['service']}_comment_vote"
+                )
+            )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
+def tg_share(service):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in service:
+        if item['category'] == 'Telegram Share Post':
+            markup.insert(
+                InlineKeyboardButton(
+                    text=item['name'], callback_data=f"{item['service']}_share"
+                )
+            )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
+def tg_bot_start(service):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in service:
+        if item['category'] == 'Telegram Bot Start - Targeted':
+            markup.insert(
+                InlineKeyboardButton(
+                    text=item['name'], callback_data=f"{item['service']}_share"
+                )
+            )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
+def tg_mix(service):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in service:
+        if item['category'] == 'Mix [ Statci View + Reaction + Share + Comment ]':
+            markup.insert(
+                InlineKeyboardButton(
+                    text=item['name'], callback_data=f"{item['service']}_share"
+                )
+            )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
