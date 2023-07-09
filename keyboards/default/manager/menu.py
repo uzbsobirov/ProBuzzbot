@@ -30,6 +30,9 @@ menu = ReplyKeyboardMarkup(
         [
             KeyboardButton(
                 text="💰 Pul qo'shish"
+            ),
+            KeyboardButton(
+                text="💳 Kartalar"
             )
         ],
         [

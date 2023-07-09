@@ -66,6 +66,19 @@ class Database:
         """
         await self.execute(sql, execute=True)
 
+    async def create_table_cards(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Cards (
+        id SERIAL PRIMARY KEY,
+        number TEXT UNIQUE,
+        callback_data TEXT,
+        name TEXT,
+        owner_name TEXT,
+        date_joined DATE
+        );
+        """
+        await self.execute(sql, execute=True)
+
     @staticmethod
     def format_args(sql, parameters: dict):
         sql += " AND ".join(
@@ -78,8 +91,14 @@ class Database:
         return await self.execute(sql, full_name, username, user_id, date_joined, fetchrow=True)
 
     async def add_sponsor(self, chat_id: str, chat_title: str, chat_type: int, chat_link: str, date_joined):
-        sql = "INSERT INTO Sponsor (chat_id, chat_title, chat_type, chat_link, date_joined) VALUES($1, $2, $3, $4, $5) returning *"
+        sql = "INSERT INTO Sponsor (chat_id, chat_title, chat_type, chat_link, date_joined) " \
+              "VALUES($1, $2, $3, $4, $5) returning *"
         return await self.execute(sql, chat_id, chat_title, chat_type, chat_link, date_joined, fetchrow=True)
+
+    async def add_card(self, number: str, callback_data: str, name: int, owner_name: str, date_joined):
+        sql = "INSERT INTO Cards (number, callback_data, name, owner_name, date_joined) " \
+              "VALUES($1, $2, $3, $4, $5) returning *"
+        return await self.execute(sql, number, callback_data, name, owner_name, date_joined, fetchrow=True)
 
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
@@ -87,6 +106,10 @@ class Database:
 
     async def select_all_sponsor(self):
         sql = "SELECT * FROM Sponsor"
+        return await self.execute(sql, fetch=True)
+
+    async def select_all_cards(self):
+        sql = "SELECT * FROM Cards"
         return await self.execute(sql, fetch=True)
 
     async def select_one_users(self, user_id):

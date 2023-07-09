@@ -1,3 +1,3 @@
 from . import (
-    check, manager, all_order, orders
+    check, manager, all_order, orders, payment
 )

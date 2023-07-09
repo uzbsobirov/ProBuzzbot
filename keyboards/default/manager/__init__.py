@@ -1,3 +1,3 @@
 from . import (
-    menu, sponsor
+    menu, sponsor, add_card
 )
