@@ -2,9 +2,9 @@ import logging
 
 from asyncpg import UniqueViolationError
 
-from keyboards.default.manager.add_card import add_card
+from keyboards.inline.manager.add_card import add_card
 from loader import db, dp
-from keyboards.inline.payment.functions import all_cards
+from keyboards.inline.payment.functions import all_cards_admin
 from states.panel import Panel
 from keyboards.default.backs import back
 from keyboards.default.manager.menu import menu
@@ -17,7 +17,7 @@ from datetime import datetime
 time = datetime.now()
 
 
-@dp.message_handler(text="💳 Kartalar", state=Panel.menu)
+@dp.message_handler(text="💳 Kartalar", state=Panel.main)
 async def payment_cards(messsage: types.Message, state: FSMContext):
     select_cards = await db.select_all_cards()
 
@@ -29,12 +29,14 @@ async def payment_cards(messsage: types.Message, state: FSMContext):
 
     else:
         text = "<b>💳 Quyidagi to'lov tizimlaridan birini tanlang:</b>"
-        await messsage.answer(text=text, reply_markup=all_cards(select_cards))
+        await messsage.answer(text=text, reply_markup=all_cards_admin(select_cards))
+        await Panel.add_card.set()
 
 
-@dp.message_handler(state=Panel.add_card)
-async def add_new_card(message: types.Message, state: FSMContext):
-    await message.answer(
+@dp.callback_query_handler(text='add_card', state=Panel.add_card)
+async def add_new_card(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
+    await call.message.answer(
         text="<b>Yaxshi, menga karta raqamini yuboring</b>",
         reply_markup=back
     )

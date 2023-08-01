@@ -27,7 +27,7 @@ def tg_members(service):
     return markup
 
 
-def tg_reaction(service):
+def tg_reaction_order(service):
     markup = InlineKeyboardMarkup(row_width=1)
     for item in service:
         if item['category'] in 'Telegram Recation [👍 ❤️🔥👎 🐳]':

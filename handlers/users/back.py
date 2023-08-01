@@ -8,6 +8,7 @@ from states.orders import Order
 from loader import dp
 from handlers.detector import detect_is_admin
 from keyboards.default.manager.menu import menu
+from states.payment import Payment
 
 
 @dp.message_handler(text="◀️ Orqaga", state=Panel.menu)
@@ -68,3 +69,22 @@ async def back_to_main(call: types.CallbackQuery, state: FSMContext):
                                  reply_markup=telegram_orders)
 
     await Order.all_orders.set()
+
+
+@dp.callback_query_handler(text='back', state=Payment.cards)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    user_id = call.from_user.id
+    await call.message.delete()
+
+    await call.message.answer(text="🖥 Asosiy menu", reply_markup=await detect_is_admin(user_id))
+    await state.finish()
+
+
+@dp.callback_query_handler(text="back", state=Panel.menu)
+async def back_to_main(call: types.CallbackQuery, state: FSMContext):
+    await call.message.delete()
+
+    text = "🖥 Admin panel"
+    await call.message.answer(text=text, reply_markup=menu)
+
+    await Panel.menu.set()

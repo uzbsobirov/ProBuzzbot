@@ -79,6 +79,19 @@ class Database:
         """
         await self.execute(sql, execute=True)
 
+    async def create_table_categories(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Category (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        call_data TEXT UNIQUE,
+        child BigInt NULL,
+        inner_child BigInt NULL,
+        date_joined DATE
+        );
+        """
+        await self.execute(sql, execute=True)
+
     @staticmethod
     def format_args(sql, parameters: dict):
         sql += " AND ".join(
@@ -106,6 +119,10 @@ class Database:
 
     async def select_all_sponsor(self):
         sql = "SELECT * FROM Sponsor"
+        return await self.execute(sql, fetch=True)
+
+    async def select_all_category(self):
+        sql = "SELECT * FROM Category"
         return await self.execute(sql, fetch=True)
 
     async def select_all_cards(self):

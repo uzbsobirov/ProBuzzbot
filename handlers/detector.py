@@ -9,3 +9,20 @@ async def detect_is_admin(user_id: Union[str, int]):
         return start_admin
     else:
         return start
+
+
+def detect_which_messenger(text):
+    if 'telegram' in text.lower():
+        return 'telegram'
+
+    elif 'instagram' in text.lower():
+        return 'instagram'
+
+    elif 'tiktok' in text.lower():
+        return 'tiktok'
+
+    elif 'youtube' in text.lower():
+        return 'youtube'
+
+    else:
+        return False

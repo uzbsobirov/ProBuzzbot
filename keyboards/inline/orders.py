@@ -1,10 +1,40 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-orders = InlineKeyboardMarkup(
+
+def orders(data):
+    markup = InlineKeyboardMarkup(row_width=2)
+    for item in data:
+        markup.insert(
+            InlineKeyboardButton(
+                text=item[1], callback_data=item[2]
+            )
+        )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
+choose_category = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(
-                text="🗂 Telegram", callback_data='telegram'
+                text="Asosiy bo'lim", callback_data='main_category'
+            ),
+            InlineKeyboardButton(
+                text="Ichki bo'lim", callback_data='child_category'
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                text="Qo'shimcha bo'lim", callback_data='inner_category'
+            ),
+            InlineKeyboardButton(
+                text="Hizmatlar", callback_data='all_order_category'
             )
         ],
         [
@@ -59,7 +89,6 @@ telegram_orders = InlineKeyboardMarkup(
         ]
     ]
 )
-
 
 type_reaction = InlineKeyboardMarkup(
     inline_keyboard=[

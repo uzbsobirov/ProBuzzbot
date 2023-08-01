@@ -1,3 +1,3 @@
 from . import (
-    telegram
+    all_orders
 )
