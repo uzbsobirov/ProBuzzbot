@@ -1,3 +1,3 @@
 from . import (
-    main_category
+    main_category, child_category
 )

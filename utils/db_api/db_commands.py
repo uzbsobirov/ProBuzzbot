@@ -82,11 +82,48 @@ class Database:
     async def create_table_categories(self):
         sql = """
         CREATE TABLE IF NOT EXISTS Category (
-        id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY UNIQUE,
         name TEXT,
         call_data TEXT UNIQUE,
         child BigInt NULL,
-        inner_child BigInt NULL,
+        date_joined DATE
+        );
+        """
+        await self.execute(sql, execute=True)
+
+    async def create_table_child_category(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS ChildCategory (
+        id SERIAL PRIMARY KEY UNIQUE,
+        name TEXT,
+        call_data TEXT UNIQUE,
+        related_id BigInt,
+        date_joined DATE
+        );
+        """
+        await self.execute(sql, execute=True)
+
+    async def create_table_inner_category(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS InnerCategory (
+        id SERIAL PRIMARY KEY UNIQUE,
+        name TEXT,
+        call_data TEXT UNIQUE,
+        order_id BigInt,
+        date_joined DATE
+        );
+        """
+        await self.execute(sql, execute=True)
+
+    async def create_table_orders(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS Orders (
+        id SERIAL PRIMARY KEY UNIQUE,
+        order_id BigInt UNIQUE,
+        name TEXT,
+        call_data TEXT UNIQUE,
+        price BigInt,
+        description TEXT,
         date_joined DATE
         );
         """
@@ -113,6 +150,11 @@ class Database:
               "VALUES($1, $2, $3, $4, $5) returning *"
         return await self.execute(sql, number, callback_data, name, owner_name, date_joined, fetchrow=True)
 
+    async def add_category(self, name: str, call_data: str, child: int, date_joined):
+        sql = "INSERT INTO Category (name, call_data, child, date_joined) " \
+              "VALUES($1, $2, $3, $4) returning *"
+        return await self.execute(sql, name, call_data, child, date_joined, fetchrow=True)
+
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
         return await self.execute(sql, fetch=True)
@@ -123,6 +165,10 @@ class Database:
 
     async def select_all_category(self):
         sql = "SELECT * FROM Category"
+        return await self.execute(sql, fetch=True)
+
+    async def select_all_childcategory(self):
+        sql = "SELECT * FROM ChildCategory"
         return await self.execute(sql, fetch=True)
 
     async def select_all_cards(self):

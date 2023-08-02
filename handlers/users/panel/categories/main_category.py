@@ -1,3 +1,7 @@
+import logging
+
+from asyncpg import UniqueViolationError
+
 from handlers.detector import detect_which_messenger
 from keyboards.inline.orders import choose_category
 from loader import dp, db
@@ -6,6 +10,10 @@ from keyboards.inline.back import back
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
+
+from datetime import datetime
+
+time = datetime.today()
 
 
 @dp.callback_query_handler(text="main_category", state=AddCategory.main)
@@ -29,6 +37,18 @@ async def add_main_category_2(message: types.Message, state: FSMContext):
     detect = detect_which_messenger(text=msg)
     if detect is not False:
         await message.answer(text="Asosiy bo'lim qo'shildi", reply_markup=choose_category)
+        try:
+            await db.add_category(
+                name=msg,
+                call_data=detect,
+                child=0,
+                date_joined=time
+            )
+
+        except UniqueViolationError as unique:
+            logging.info(unique)
+            await message.answer(text="Bu bo'lim qo'shilgan ekan", reply_markup=choose_category)
+
         await AddCategory.main.set()
 
     else:
@@ -41,10 +61,24 @@ async def add_main_category_2(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=AddCategory.main_category_slug, content_types=types.ContentType.TEXT)
 async def add_main_category_slug(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    name = data.get('main_category_name')
+
     msg = message.text
 
     if msg.isalpha():
-        pass
+        try:
+            await db.add_category(
+                name=name,
+                call_data=msg,
+                child=0,
+                date_joined=time
+            )
+
+        except UniqueViolationError as unique:
+            logging.info(unique)
+            await message.answer(text="Bu bo'lim qo'shilgan ekan", reply_markup=choose_category)
+            await AddCategory.main.set()
 
     else:
         await message.answer(text="Faqat harflardan foydalaning!")

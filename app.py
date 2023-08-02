@@ -12,6 +12,9 @@ async def on_startup(dispatcher):
     await db.create_table_sponsor()
     await db.create_table_cards()
     await db.create_table_categories()
+    await db.create_table_child_category()
+    await db.create_table_inner_category()
+    await db.create_table_orders()
 
     # Birlamchi komandalar (/start va /help)
     await set_default_commands(dispatcher)
