@@ -19,4 +19,4 @@ time = datetime.today()
 @dp.callback_query_handler(text="child_category", state=AddCategory.main)
 async def child_category_chop(call: types.CallbackQuery, state: FSMContext):
     pass
-select_all_childcategory
+# select_all_childcategory

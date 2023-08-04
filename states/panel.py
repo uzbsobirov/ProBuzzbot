@@ -23,3 +23,9 @@ class AddCategory(StatesGroup):
 
     main_category_name = State()
     main_category_slug = State()
+
+
+class Categories(StatesGroup):
+    category = State()
+
+    change_name = State()

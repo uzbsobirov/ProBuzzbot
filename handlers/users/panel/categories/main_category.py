@@ -3,6 +3,7 @@ import logging
 from asyncpg import UniqueViolationError
 
 from handlers.detector import detect_which_messenger
+from keyboards.inline.all_order.all_category import all_categories
 from keyboards.inline.orders import choose_category
 from loader import dp, db
 from states.panel import AddCategory
@@ -18,10 +19,19 @@ time = datetime.today()
 
 @dp.callback_query_handler(text="main_category", state=AddCategory.main)
 async def add_main_category(call: types.CallbackQuery, state: FSMContext):
-    await call.message.edit_text(
-        text="Asosiy bo'limm nomini yozing...",
-        reply_markup=back
-    )
+    select_categories = await db.select_all_category()
+
+    if len(select_categories) == 0:
+        await call.message.edit_text(
+            text="Asosiy bo'limm nomini yozing...",
+            reply_markup=back
+        )
+
+    else:
+        await call.message.edit_text(
+            text="Quyidagilardan birini tanlang",
+            reply_markup=all_categories(data=select_categories)
+        )
 
     await AddCategory.main_category_name.set()
 

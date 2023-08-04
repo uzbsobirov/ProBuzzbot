@@ -179,6 +179,10 @@ class Database:
         sql = "SELECT * FROM Users WHERE user_id=$1"
         return await self.execute(sql, user_id, fetch=True)
 
+    async def select_one_category(self, call_data):
+        sql = "SELECT * FROM Category WHERE call_data=$1"
+        return await self.execute(sql, call_data, fetch=True)
+
     async def select_user(self, **kwargs):
         sql = "SELECT * FROM Users WHERE "
         sql, parameters = self.format_args(sql, parameters=kwargs)
@@ -192,9 +196,17 @@ class Database:
         sql = "UPDATE Users SET issubs=$1 WHERE user_id=$2"
         return await self.execute(sql, issubs, user_id, execute=True)
 
+    async def update_category_name(self, name, call_data):
+        sql = "UPDATE Category SET name=$1 WHERE call_data=$2"
+        return await self.execute(sql, name, call_data, execute=True)
+
     async def delete_sponsor(self, chat_id):
         sql = "DELETE FROM Sponsor WHERE chat_id=$1"
         await self.execute(sql, chat_id, execute=True)
+
+    async def delete_one_category(self, call_data):
+        sql = "DELETE FROM Category WHERE call_data=$1"
+        await self.execute(sql, call_data, execute=True)
 
     async def drop_courses(self):
         await self.execute("DROP TABLE Courses", execute=True)

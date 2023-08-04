@@ -1,6 +1,51 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
+def all_categories(data):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in data:
+        markup.insert(
+            InlineKeyboardButton(
+                text=item[1], callback_data='order_{}'.format(item[2])
+            )
+        )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="Yangi bo'lim qo'shish", callback_data='add_main_category'
+        )
+    )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
+def data_category(data):
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.insert(
+        InlineKeyboardButton(
+            text="Bo'limni o'chirish", callback_data=f'order_delete_{data}'
+        )
+    )
+    markup.insert(
+        InlineKeyboardButton(
+            text="Nomini o'zgartirish", callback_data=f'order_change_name_{data}'
+        )
+    )
+
+    markup.insert(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+    return markup
+
+
 def tg_members(service):
     markup = InlineKeyboardMarkup(row_width=1)
     for item in service:
