@@ -1,3 +1,5 @@
+import slugify
+
 from typing import Union
 
 from keyboards.default.start import start, start_admin
@@ -28,4 +30,6 @@ def detect_which_messenger(text):
         return False
 
 
-
+def create_slug(text):
+    slug = slugify.slugify(text)
+    return slug

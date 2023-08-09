@@ -25,6 +25,30 @@ def all_categories(data):
     return markup
 
 
+def all_child_categories(data):
+    markup = InlineKeyboardMarkup(row_width=1)
+    for item in data:
+        markup.insert(
+            InlineKeyboardButton(
+                text=item[1], callback_data='child_{}'.format(item[2])
+            )
+        )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="Yangi bo'lim qo'shish", callback_data='add_child_category'
+        )
+    )
+
+    markup.add(
+        InlineKeyboardButton(
+            text="◀️ Orqaga", callback_data='back'
+        )
+    )
+
+    return markup
+
+
 def data_category(data):
     markup = InlineKeyboardMarkup(row_width=2)
     markup.insert(

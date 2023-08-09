@@ -3,20 +3,19 @@ from keyboards.inline.all_order.all_category import data_category, all_categorie
 from keyboards.inline.back import back
 from keyboards.inline.orders import choose_category
 from loader import dp, db
-from states.panel import AddCategory, Categories, Panel
+from states.panel import AddCategory, Categories, Panel, ChildCategory
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 
-@dp.callback_query_handler(text_contains="order_", state=AddCategory.main_category_name)
+@dp.callback_query_handler(text_contains="child_", state=ChildCategory.main)
 async def manage_categories(call: types.CallbackQuery, state: FSMContext):
     data = call.data
-    splited = data.split('_')
-    select_order = await db.select_one_category(splited[1])
+    select_order = await db.select_one_child_category(data)
 
-    text = f"Bo'lim malumotlari👇\n\n🆔 ID: <code>{select_order[0][0]}</code>\n🗒 Nomi: {select_order[0][1]}\n" \
-           f"📎 Slug: {select_order[0][2]}"
+    text = f"Ichki bo'lim malumotlari👇\n\n🆔 ID: <code>{select_order[0][0]}</code>\n🗒 Nomi: {select_order[0][1]}\n" \
+           f"🔗 Bog'langan bo'lim: {select_order[0][3]}"
 
     await call.message.edit_text(
         text=text,

@@ -155,6 +155,11 @@ class Database:
               "VALUES($1, $2, $3, $4) returning *"
         return await self.execute(sql, name, call_data, child, date_joined, fetchrow=True)
 
+    async def add_child_category(self, name: str, call_data: str, related_id: int, date_joined):
+        sql = "INSERT INTO ChildCategory (name, call_data, related_id, date_joined) " \
+              "VALUES($1, $2, $3, $4) returning *"
+        return await self.execute(sql, name, call_data, related_id, date_joined, fetchrow=True)
+
     async def select_all_users(self):
         sql = "SELECT * FROM Users"
         return await self.execute(sql, fetch=True)
@@ -181,6 +186,10 @@ class Database:
 
     async def select_one_category(self, call_data):
         sql = "SELECT * FROM Category WHERE call_data=$1"
+        return await self.execute(sql, call_data, fetch=True)
+
+    async def select_one_child_category(self, call_data):
+        sql = "SELECT * FROM ChildCategory WHERE call_data=$1"
         return await self.execute(sql, call_data, fetch=True)
 
     async def select_user(self, **kwargs):

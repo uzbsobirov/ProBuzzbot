@@ -25,6 +25,15 @@ class AddCategory(StatesGroup):
     main_category_slug = State()
 
 
+class Add_Category(StatesGroup):
+    name = State()
+
+
+class ChildCategory(StatesGroup):
+    main = State()
+    related_id = State()
+
+
 class Categories(StatesGroup):
     category = State()
 
